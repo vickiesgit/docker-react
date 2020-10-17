@@ -1,0 +1,21 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t vickies/docker-react -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true vickies/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-west-2'
+  app: 'docker-react'
+  env: 'DockerReact-env'
+  bucket_name: 'elasticbeanstalk-us-west-2-448685331894'
+  bucket_path: 'docker-react'
+  on:
+    branch: master
